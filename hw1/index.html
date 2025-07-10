@@ -52,7 +52,16 @@
 
 		<h2>Task 1: Drawing Single-Color Triangles</h2>
 		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
+		Task1
+		(1)	how to rasterize?
+		Given the coordinates of the three vertices of the triangle as input.
+		Get the bounding box of the triangle.
+		For each pixel within the bounding box, decide whether their centers are within or on the edge of the triangle by using the “inside” function (so we need to define “inside” first).
+		The “inside” function: Bool. Given coordinates, calculate the cross products that we need; then return true if the tested point is on the same side of each edge of the triangle (i.e. the three cross products are of the same sign)
+		（2）Explain how your algorithm is no worse than one that checks each sample within the bounding box of the triangle. (what does it mean?)
+		-I check every pixel center within the bounding box once, by using the point-in-triangle test. Then fill the pixel with color only if the pixel is within or on the edge of the bounding box.
+		-No pixel center outside the bounding box is checked so that I save space a lot.
+			
 		<p>Here is an example 2x2 gridlike structure using an HTML table. Each <b>tr</b> is a row and each <b>td</b> is a column in that row. You might find this useful for framing and showing your result images in an organized fashion.</p>
 		<div style="display: flex; flex-direction: column; align-items: center;">
 			<table style="width: 100%; text-align: center; border-collapse: collapse;">
