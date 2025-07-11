@@ -75,8 +75,8 @@
 
 			<p><b>Data Structures used:</b></p>
 			<ol>
-				<li>std::vector&lt;Color&gt;: <br>'sample_buffer' stores supersampled color values for all pixels<br>size: width * height * sample_rate</li>
-				<li>unsigned char: <br>'rgb_framebuffer_target' is the final framebuffer to be displayed on screen</li>
+				<li>std::vector&lt;Color&gt;: <br><code>sample_buffer()</code> stores supersampled color values for all pixels<br>size: width * height * sample_rate</li>
+				<li>unsigned char: <br><code>rgb_framebuffer_target()</code> is the final framebuffer to be displayed on screen</li>
 			</ol>
 
 			<p><b>Modifications:</b></p>
@@ -86,15 +86,20 @@
 					Originally, we only stored the color values of each pixel center in the sample_buffer.
 					Now, we resize sample_buffer to store all color values of all pixels, including subpixels.
 				</li>
-				<li><p><b><code>rasterize_triangle(...)</code>:</b><br></p>
+				<li><p><b><code>rasterize_triangle()</code>:</b><br></p>
 					Originally, we only stored the color values of each pixel center in the sample_buffer.
 					Now, we resize sample_buffer to store all color values of all pixels, including subpixels.
 				</li>
+				<li><p><b><code>resolve_to_framebuffer()</code>:</b><br></p>
+					After we resized the sample_buffer to contain color values of all pixels,
+					we averaged the color values of each sample_rate times sample_rate grid.
+					The, the results are written into reb_gramebuffer_target, which is ultimately displayed.
+				</li>
+				<li><p><b><code>fill_pixel()</code>:</b><br></p>
+					Since lines and points are not supersampled,
+					we modified this function to write the same color to all sub-pixels within a pixel when drawing lines and points.
+				</li>
 			</ol>
-
-			<p><b>1. <code>set_sample_rate()</code> &amp; <code>set_framebuffer_target()</code>:</b><br></p>
-			Originally, we only stored the color values of each pixel center in the sample_buffer.
-			Now, we resize sample_buffer to store all color values of all pixels, including subpixels.
 
 			<p><b>How does supersampling antialias our triangles?</b><br>
 				Supersampling means that we sample each pixel multiple times instead of only once as we did without supersampling.
