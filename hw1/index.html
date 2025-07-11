@@ -81,11 +81,20 @@
 
 			<p><b>Modifications:</b></p>
 
+			<ol>
+				<li><p><b><code>set_sample_rate()</code> &amp; <code>set_framebuffer_target()</code>:</b><br></p>
+					Originally, we only stored the color values of each pixel center in the sample_buffer.
+					Now, we resize sample_buffer to store all color values of all pixels, including subpixels.
+				</li>
+				<li><p><b><code>rasterize_triangle(...)</code>:</b><br></p>
+					Originally, we only stored the color values of each pixel center in the sample_buffer.
+					Now, we resize sample_buffer to store all color values of all pixels, including subpixels.
+				</li>
+			</ol>
+
 			<p><b>1. <code>set_sample_rate()</code> &amp; <code>set_framebuffer_target()</code>:</b><br></p>
-
-			Originally, we sampled only the center of each pixel. Now we loop over every sub-pixel in a sample_rate × sample_rate grid, within each pixel.
-
-			Since lines and points are not supersampled, we fill all subpixels with the same color.
+			Originally, we only stored the color values of each pixel center in the sample_buffer.
+			Now, we resize sample_buffer to store all color values of all pixels, including subpixels.
 
 			<p><b>How does supersampling antialias our triangles?</b><br>
 				Supersampling means that we sample each pixel multiple times instead of only once as we did without supersampling.
