@@ -65,19 +65,147 @@
 				- No pixel center outside the bounding box is checked so that I save time and computation.
 			</p>
 
-			<p><b>How to generate a screenshot by using the ‘s’ hotkey?</b><br>
-				When the viewer window is active, simply press the <code>s</code> key on your keyboard. A screenshot will be saved in the current working directory as a PNG file named like <code>screenshot_7-10_17-47-29.png</code>.
-			</p>
-
 			<figure>
-				<img src="task1_screenshot.png" alt="Task 1 Screenshot" style="width:50%">
+				<img src="Task1_test4.png" alt="Task 1 Screenshot" style="width:50%">
 				<figcaption>Screenshot of triangle rasterization (Task 1)</figcaption>
 			</figure>
 
 		<h2>Task 2: Antialiasing by Supersampling</h2>
 		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			<p><b>Supersampling algorithm:</b></p>
+			<ol>
+				<li>Divide each pixel into a grid of <code>sample_rate × sample_rate</code> subpixels</li>
+				<li>Rasterization: loop through the subpixels and compute their center’s location; then check whether they lie inside the triangle using the <code>inside</code> function; then store the color values of the pixels that are inside the triangle in the <code>sample_buffer</code></li>
+				<li>Resolve to framebuffer: after all the primitives are rasterized into the sample buffer, use <code>resolve_to_framebuffer()</code> to compute the final pixel color. For each pixel, average its subpixel values and write the result into the final framebuffer (<code>rgb_framebuffer_target</code>).</li>
+			</ol>
 
-		<h2>Task 3: Transforms</h2>
+			<p><b>Data Structures used:</b></p>
+			<ol>
+				<li><code>std::vector&lt;Color&gt;</code>: <br>“<code>sample_buffer</code>” stores supersampled color values for all pixels<br>size: <code>width * height * sample_rate</code></li>
+				<li><code>unsigned char</code>: <br>“<code>rgb_framebuffer_target</code>” is the final framebuffer to be displayed on screen</li>
+			</ol>
+
+			<p><b>Modifications:</b></p>
+
+			<p><b>1. <code>set_sample_rate()</code> &amp; <code>set_framebuffer_target()</code>:</b><br>
+				Change:<br>
+				<code>this-&gt;sample_buffer.resize(width * height, Color::White);</code><br>
+				to:<br>
+				<code>this-&gt;sample_buffer.resize(width * height * sample_rate, Color::White);</code><br>
+				Originally, we only stored the color values of each pixel center in the sample_buffer. Now, we resize sample_buffer to store all color values of all pixels, including subpixels.
+			</p>
+
+			<p><b>2. <code>rasterize_triangle(...)</code>:</b><br>
+				Change:<br>
+			<pre><code>void RasterizerImp::rasterize_triangle(float x0, float y0,
+    float x1, float y1,
+    float x2, float y2,
+    Color color) {
+    int minX = (int)floor(min(x0, min(x1, x2)));
+    int maxX = (int)ceil(max(x0, max(x1, x2)));
+    int minY = (int)floor(min(y0, min(y1, y2)));
+    int maxY = (int)ceil(max(y0, max(y1, y2)));
+
+    for (int x = minX; x <= maxX; ++x) {
+      for (int y = minY; y <= maxY; ++y) {
+        float cx = x + 0.5;
+        float cy = y + 0.5;
+        if (inside(cx, cy, x0, y0, x1, y1, x2, y2)) {
+          if (x >= 0 && x < width && y >= 0 && y < height)
+            fill_pixel(x, y, color);
+        }
+      }
+    }
+}</code></pre>
+
+			To:<br>
+			<pre><code>void RasterizerImp::rasterize_triangle(float x0, float y0,
+  float x1, float y1,
+  float x2, float y2,
+  Color color) {
+  int sqrt_rate = (int)sqrt(sample_rate);
+  float subpixel_stride = 1.0f / sqrt_rate;
+
+  int minX = (int)floor(min(x0, min(x1, x2)));
+  int maxX = (int)ceil(max(x0, max(x1, x2)));
+  int minY = (int)floor(min(y0, min(y1, y2)));
+  int maxY = (int)ceil(max(y0, max(y1, y2)));
+
+  for (int x = minX; x < maxX; ++x) {
+    for (int y = minY; y < maxY; ++y) {
+      for (int i = 0; i < sqrt_rate; ++i) {
+        for (int j = 0; j < sqrt_rate; ++j) {
+          float sx = x + (i + 0.5f) * subpixel_stride;
+          float sy = y + (j + 0.5f) * subpixel_stride;
+
+          if (inside(sx, sy, x0, y0, x1, y1, x2, y2)) {
+            if (x >= 0 && x < width && y >= 0 && y < height) {
+              size_t index = (y * width + x) * sample_rate + i * sqrt_rate + j;
+              sample_buffer[index] = color;
+            }
+          }
+        }
+      }
+    }
+  }
+}</code></pre>
+			Originally, we sampled only the center of each pixel. Now we loop over every sub-pixel in a sample_rate × sample_rate grid, within each pixel.
+
+			<p><b>3. <code>resolve_to_framebuffer()</code>:</b><br>
+				Change:<br>
+			<pre><code>for (int x = 0; x < width; ++x) {
+  for (int y = 0; y < height; ++y) {
+    Color col = sample_buffer[y * width + x];
+    for (int k = 0; k < 3; ++k) {
+      rgb_framebuffer_target[3 * (y * width + x) + k] = (&col.r)[k] * 255;
+    }
+  }
+}</code></pre>
+			To:<br>
+			<pre><code>for (int x = 0; x < width; ++x) {
+  for (int y = 0; y < height; ++y) {
+    Color avg_color = Color(0, 0, 0);
+    for (int i = 0; i < sample_rate; ++i) {
+      avg_color += sample_buffer[(y * width + x) * sample_rate + i];
+    }
+    avg_color *= (1.0f / sample_rate);
+    for (int k = 0; k < 3; ++k) {
+      rgb_framebuffer_target[3 * (y * width + x) + k] = (&avg_color.r)[k] * 255;
+    }
+  }
+}</code></pre>
+
+			<p><b>4. <code>fill_pixel()</code>:</b><br>
+				Change:<br>
+			<pre><code>sample_buffer[y * width + x] = c;</code></pre>
+			To:<br>
+			<pre><code>for (int i = 0; i < sample_rate; ++i) {
+  sample_buffer[(y * width + x) * sample_rate + i] = c;
+}</code></pre>
+			Since lines and points are not supersampled, we fill all subpixels with the same color.
+
+			<p><b>How does supersampling antialias our triangles?</b><br>
+				Supersampling means we sample each pixel multiple times instead of only once. By averaging the results of multiple subpixel samples, the final color better reflects partial coverage. This results in smoother triangle edges with reduced jaggedness.
+			</p>
+
+			<!-- Images comparison: three images in a row -->
+			<div style="display: flex; justify-content: center; gap: 20px; margin-top: 20px;">
+				<figure>
+					<img src="Task2_test4_1.png" width="250px">
+					<figcaption>Sample Rate 1</figcaption>
+				</figure>
+				<figure>
+					<img src="Task2_test4_4.png" width="250px">
+					<figcaption>Sample Rate 4</figcaption>
+				</figure>
+				<figure>
+					<img src="Task2_test4_16.png" width="250px">
+					<figcaption>Sample Rate 16</figcaption>
+				</figure>
+			</div>
+
+
+			<h2>Task 3: Transforms</h2>
 		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
 		<h2>Task 4: Barycentric coordinates</h2>
