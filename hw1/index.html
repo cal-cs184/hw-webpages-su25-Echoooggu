@@ -28,7 +28,7 @@
 	<body>
 		<div class="container">
 		<h1>CS184 Summer 2025 Homework 1 Write-Up</h1>
-		<div style="text-align: center;">Names: </div>
+		<div style="text-align: center;">Names: Xiangru Huang, Yanshi Liang </div>
 
 		<br>
 
@@ -81,21 +81,19 @@
 
 			<p><b>Modifications:</b></p>
 
-			<p><b>1. <code>set_sample_rate()</code> &amp; <code>set_framebuffer_target()</code>:</b><br>
-				Change:<br>
-				<code>this-&gt;sample_buffer.resize(width * height, Color::White);</code><br>
-				to:<br>
-				<code>this-&gt;sample_buffer.resize(width * height * sample_rate, Color::White);</code><br>
-				Originally, we only stored the color values of each pixel center in the sample_buffer. Now, we resize sample_buffer to store all color values of all pixels, including subpixels.
-			</p>
+			<p><b>1. <code>set_sample_rate()</code> &amp; <code>set_framebuffer_target()</code>:</b><br></p>
 
 			Originally, we sampled only the center of each pixel. Now we loop over every sub-pixel in a sample_rate × sample_rate grid, within each pixel.
 
 			Since lines and points are not supersampled, we fill all subpixels with the same color.
 
 			<p><b>How does supersampling antialias our triangles?</b><br>
-				Supersampling means we sample each pixel multiple times instead of only once. By averaging the results of multiple subpixel samples, the final color better reflects partial coverage. This results in smoother triangle edges with reduced jaggedness.
-			</p>
+				Supersampling means that we sample each pixel multiple times instead of only once as we did without supersampling.
+				We also average the results of sub-pixels within the pixel grid.
+				As a result, the pixel’s color does not only depend on its center or any single point within it,
+				but depends on several samples, which softens the harsh transition between filled and empty pixels, producing smoother triangle edges without jaggedness.
+				For example, the final color of a pixel partially covered by the triangle is an average between triangle color and the background,
+				and is not either the triangle color or the background color anymore.</p>
 
 			<div style="display: flex; justify-content: center; gap: 20px; margin-top: 20px;">
 				<figure>
