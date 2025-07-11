@@ -53,7 +53,7 @@
 		<h2>Task 1: Drawing Single-Color Triangles</h2>
 
 		Task1
-		(1)	how to rasterize?
+		(1) How to rasterize?
 		Given the coordinates of the three vertices of the triangle as input.
 		Get the bounding box of the triangle.
 		For each pixel within the bounding box, decide whether their centers are within or on the edge of the triangle by using the “inside” function (so we need to define “inside” first).
@@ -61,6 +61,19 @@
 		（2）Explain how your algorithm is no worse than one that checks each sample within the bounding box of the triangle. (what does it mean?)
 		-I check every pixel center within the bounding box once, by using the point-in-triangle test. Then fill the pixel with color only if the pixel is within or on the edge of the bounding box.
 		-No pixel center outside the bounding box is checked so that I save space a lot.
+		<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.4, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="487.211px" height="642.045px" viewBox="0 0 487.211 642.045" enable-background="new 0 0 487.211 642.045"
+	 xml:space="preserve">
+<polygon fill="#1865ED" points="0,213.637 123.343,0 246.686,213.637 "/>
+<polygon fill="#18ED18" points="317.662,163.637 448.343,0 487.211,129.546 "/>
+<polygon fill="#EF161F" points="15.621,302.273 251.417,293.182 487.211,263.637 "/>
+<polygon fill="#EDB518" points="241.525,572.727 25.616,572.727 25.616,356.817 "/>
+<polygon fill="#ED18ED" points="464.781,631.819 478.417,309.091 471.599,642.045 "/>
+</svg>
+
 			
 		<p>Here is an example 2x2 gridlike structure using an HTML table. Each <b>tr</b> is a row and each <b>td</b> is a column in that row. You might find this useful for framing and showing your result images in an organized fashion.</p>
 		<div style="display: flex; flex-direction: column; align-items: center;">
