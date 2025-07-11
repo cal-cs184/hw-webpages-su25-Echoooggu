@@ -43,15 +43,16 @@
 		-->
 
 		<h2>Overview</h2>
-		Give a high-level overview of what you implemented in this homework. Think about what you've built as a whole. Share your thoughts on what interesting things you've learned from completing the homework.
+		Give a high-level overview of what you implemented in this homework.
+			Think about what you've built as a whole. Share your thoughts on what interesting things you've learned from completing the homework.
 
 		<h2>Task 1: Drawing Single-Color Triangles</h2>
 
 			<p><b>(1) How to rasterize?</b><br>
 				Given the coordinates of the three vertices of the triangle as input.<br>
 				Get the bounding box of the triangle.<br>
-				For each pixel within the bounding box, decide whether their centers are within or on the edge of the triangle by using the “inside” function (so we need to define “inside” first).<br>
-				The “inside” function: Bool. Given coordinates, calculate the cross products that we need; then return true if the tested point is on the same side of each edge of the triangle (i.e. the three cross products are of the same sign).
+				For each pixel within the bounding box, decide whether their centers are within or on the edge of the triangle by using the <code>inside</code> function (so we need to define <code>inside</code> first).<br>
+				The <code>inside</code> function: Bool. Given coordinates, calculate the cross products that we need; then return true if the tested point is on the same side of each edge of the triangle (i.e. the three cross products are of the same sign).
 			</p>
 
 			<p><b>(2) Explain how your algorithm is no worse than one that checks each sample within the bounding box of the triangle.</b><br>
@@ -65,7 +66,6 @@
 			</figure>
 
 		<h2>Task 2: Antialiasing by Supersampling</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 			<p><b>Supersampling algorithm:</b></p>
 			<ol>
 				<li>Divide each pixel into a grid of subpixels</li>
@@ -124,9 +124,60 @@
 				</figure>
 			</div>
 
+		<h2>Task 3: Transforms</h2>
+			<p><b>Idea: a dancing Christmas tree</b><br>
 
-			<h2>Task 3: Transforms</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			<p><b>Modifications:</b><br>
+
+			<ol>
+				<li><b>Head</b>
+					<ul>
+						<li>Deleted a polygon</li>
+						<li>Color: changed the original red to Christmas red <code>#C8102E</code> by adjusting the code for <code>fill</code></li>
+						<li>Adjusted the three vertices of the triangle by modifying the <code>points</code> attribute</li>
+					</ul>
+				</li>
+
+				<li><b>Right hand</b>
+					<ul>
+						<li>Rotated the two polygons together by 45 degrees counterclockwise</li>
+						<li>Color: changed the original red to Christmas green <code>#007A33</code> by adjusting the code for <code>fill</code></li>
+					</ul>
+				</li>
+
+				<li><b>Right leg</b>
+					<ul>
+						<li>Rotated the two polygons together by 45 degrees clockwise</li>
+						<li>Rotated the lower polygon by 90 degrees counterclockwise</li>
+						<li>Color: changed the original red to brown <code>#8B4513</code> by adjusting the code for <code>fill</code></li>
+					</ul>
+				</li>
+
+				<li><b>Torso</b>
+					<ul>
+						<li>Adjusted two vertices by modifying the <code>points</code> so that the torso looks like a tree trunk</li>
+						<li>Color: changed the original red to Christmas green <code>#007A33</code> by adjusting the code for <code>fill</code></li>
+					</ul>
+				</li>
+
+				<li><b>Left leg</b>
+					<ul>
+						<li>Color: changed the original red to brown <code>#8B4513</code> by adjusting the code for <code>fill</code></li>
+					</ul>
+				</li>
+
+				<li><b>Left hand</b>
+					<ul>
+						<li>Color: changed the original red to Christmas green <code>#007A33</code> by adjusting the code for <code>fill</code></li>
+					</ul>
+				</li>
+			</ol>
+
+			<figure>
+				<img src="Task3.png" alt="a Christmas version cubeman" style="width: 300px;">
+				<figcaption>a Christmas version cubeman</figcaption>
+			</figure>
+			
 
 		<h2>Task 4: Barycentric coordinates</h2>
 			<img src="Task4_test7.png" alt="Task 4 Triangle Output" width="600">
