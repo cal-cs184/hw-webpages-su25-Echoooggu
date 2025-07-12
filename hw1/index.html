@@ -46,6 +46,9 @@
 		Give a high-level overview of what you implemented in this homework.
 			Think about what you've built as a whole. Share your thoughts on what interesting things you've learned from completing the homework.
 
+
+
+
 		<h2>Task 1: Drawing Single-Color Triangles</h2>
 
 			<p><b>(1) How to rasterize?</b><br>
@@ -75,6 +78,9 @@
 					<figcaption>Task1 test4 with inspector.png</figcaption>
 				</figure>
 			</div>
+
+
+
 
 		<h2>Task 2: Antialiasing by Supersampling</h2>
 			<p><b>Supersampling algorithm:</b></p>
@@ -138,10 +144,51 @@
 				This explains the results, where there seems to be more 'blurred' pixels as the sample rate increases.</p>
 
 
+
+
 			<h2>Task 3: Transforms</h2>
 			<p><b>Idea: a dancing Christmas tree</b><br>
 
-			<p><b>Modifications:</b><br>
+			<p><b>transform.cpp:</b><br>
+			<section>
+				<h4>Transformation Matrices using Homogeneous Coordinates</h4>
+				<p style="font-size: 16px; max-width: 800px;">
+					We implemented affine transformations (rotation,
+					translation, and scaling) by using 3×3 matrices in homogeneous coordinates.
+					This unified representation allows for combining multiple transformations efficiently in the 2D rendering pipeline.
+				</p>
+
+				<div style="display: flex; justify-content: space-around; align-items: flex-start; margin-top: 30px;">
+					<div style="text-align: center;">
+						<h2 style="font-size: 18px;">Rotation</h2>
+						<table style="border-collapse: collapse; margin: 0 auto;">
+							<tr><td style="border: 1px solid #333; padding: 10px 15px;">cosθ</td><td style="border: 1px solid #333; padding: 10px 15px;">-sinθ</td><td style="border: 1px solid #333; padding: 10px 15px;">0</td></tr>
+							<tr><td style="border: 1px solid #333; padding: 10px 15px;">sinθ</td><td style="border: 1px solid #333; padding: 10px 15px;">cosθ</td><td style="border: 1px solid #333; padding: 10px 15px;">0</td></tr>
+							<tr><td style="border: 1px solid #333; padding: 10px 15px;">0</td><td style="border: 1px solid #333; padding: 10px 15px;">0</td><td style="border: 1px solid #333; padding: 10px 15px;">1</td></tr>
+						</table>
+					</div>
+
+					<div style="text-align: center;">
+						<h2 style="font-size: 18px;">Translation</h2>
+						<table style="border-collapse: collapse; margin: 0 auto;">
+							<tr><td style="border: 1px solid #333; padding: 10px 15px;">1</td><td style="border: 1px solid #333; padding: 10px 15px;">0</td><td style="border: 1px solid #333; padding: 10px 15px;">dx</td></tr>
+							<tr><td style="border: 1px solid #333; padding: 10px 15px;">0</td><td style="border: 1px solid #333; padding: 10px 15px;">1</td><td style="border: 1px solid #333; padding: 10px 15px;">dy</td></tr>
+							<tr><td style="border: 1px solid #333; padding: 10px 15px;">0</td><td style="border: 1px solid #333; padding: 10px 15px;">0</td><td style="border: 1px solid #333; padding: 10px 15px;">1</td></tr>
+						</table>
+					</div>
+
+					<div style="text-align: center;">
+						<h2 style="font-size: 18px;">Scaling</h2>
+						<table style="border-collapse: collapse; margin: 0 auto;">
+							<tr><td style="border: 1px solid #333; padding: 10px 15px;">sx</td><td style="border: 1px solid #333; padding: 10px 15px;">0</td><td style="border: 1px solid #333; padding: 10px 15px;">0</td></tr>
+							<tr><td style="border: 1px solid #333; padding: 10px 15px;">0</td><td style="border: 1px solid #333; padding: 10px 15px;">sy</td><td style="border: 1px solid #333; padding: 10px 15px;">0</td></tr>
+							<tr><td style="border: 1px solid #333; padding: 10px 15px;">0</td><td style="border: 1px solid #333; padding: 10px 15px;">0</td><td style="border: 1px solid #333; padding: 10px 15px;">1</td></tr>
+						</table>
+					</div>
+				</div>
+			</section>
+
+			<p><b>Modifications in robot.svg:</b><br>
 
 			<ol>
 				<li><b>Head</b>
@@ -194,7 +241,7 @@
 
 
 		<h2>Task 4: Barycentric coordinates</h2>
-			
+
 			<h2>Barycentric Coordinates</h2>
 
 			<p>
