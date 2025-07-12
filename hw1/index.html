@@ -49,21 +49,32 @@
 		<h2>Task 1: Drawing Single-Color Triangles</h2>
 
 			<p><b>(1) How to rasterize?</b><br>
-				Given the coordinates of the three vertices of the triangle as input.<br>
-				Get the bounding box of the triangle.<br>
-				For each pixel within the bounding box, decide whether their centers are within or on the edge of the triangle by using the <code>inside</code> function (so we need to define <code>inside</code> first).<br>
-				The <code>inside</code> function: Bool. Given coordinates, calculate the cross products that we need; then return true if the tested point is on the same side of each edge of the triangle (i.e. the three cross products are of the same sign).
+				- Given the coordinates of the three vertices of the triangle as input.<br>
+				- Get the bounding box of the triangle by getting the minimum and maximum x, y coordinates of the three vertices.<br>
+				- For each pixel within the bounding box, decide whether their centers are within or on the edge of the triangle by using the <code>inside()</code> function.<br>
+				<b>The <code>inside</code> function:</b>
+				- Bool. Decide whether a target pixel center is within the triangle<br>
+				- Given coordinates of the three vertices of the triangle, we fix one of them,
+				then calculate the cross product of each edge and the line between the fixed vertex and the target pixel center.<br>
+				- Return true if the target point is on the same side of each edge of the triangle (i.e. the three cross products are of the same sign).
 			</p>
 
 			<p><b>(2) Explain how your algorithm is no worse than one that checks each sample within the bounding box of the triangle.</b><br>
-				- I check every pixel center within the bounding box once, by using the point-in-triangle test. Then fill the pixel with color only if the pixel is within or on the edge of the triangle.<br>
+				- We check every pixel center within the bounding box once, by using the point-in-triangle test (i.e. the <code>inside()</code> functions).
+				Then fill the pixel with color only if the pixel is within or on the edge of the triangle.<br>
 				- No pixel center outside the bounding box is checked so that I save time and computation.
 			</p>
 
-			<figure>
-				<img src="Task1_test4.png" alt="Task 1 Screenshot" style="width:50%">
-				<figcaption>Task1_test4</figcaption>
-			</figure>
+			<div style="display: flex; justify-content: center; gap: 20px; margin-top: 20px;">
+				<figure>
+					<img src="Task1_test4.png" alt="Task 1 Screenshot" style="width:50%">
+					<figcaption>Task1 test4</figcaption>
+				</figure>
+				<figure>
+					<img src="Task1_with_inspector.png" style="width: 300px;">
+					<figcaption>Task1 test4 with inspector.png</figcaption>
+				</figure>
+			</div>
 
 		<h2>Task 2: Antialiasing by Supersampling</h2>
 			<p><b>Supersampling algorithm:</b></p>
@@ -101,14 +112,6 @@
 				</li>
 			</ol>
 
-			<p><b>How does supersampling antialias our triangles?</b><br>
-				Supersampling means that we sample each pixel multiple times instead of only once as we did without supersampling.
-				We also average the results of sub-pixels within the pixel grid.
-				As a result, the pixel’s color does not only depend on its center or any single point within it,
-				but depends on several samples, which softens the harsh transition between filled and empty pixels, producing smoother triangle edges without jaggedness.
-				For example, the final color of a pixel partially covered by the triangle is an average between triangle color and the background,
-				and is not either the triangle color or the background color anymore.</p>
-
 			<div style="display: flex; justify-content: center; gap: 20px; margin-top: 20px;">
 				<figure>
 					<img src="Task2_test4_1.png" width="250px">
@@ -124,7 +127,18 @@
 				</figure>
 			</div>
 
-		<h2>Task 3: Transforms</h2>
+			<p><b>Why the results above are observed? <br>
+				-> How does supersampling antialias our triangles? Why is supersampling useful?</b><br>
+				Supersampling means that we sample each pixel multiple times instead of only once as we did without supersampling.
+				We also average the results of sub-pixels within the pixel grid.<br>
+				As a result, the pixel’s color does not only depend on its center or any single point within it,
+				Instead, it depends on several samples, which softens the harsh transition between filled and empty pixels, producing smoother triangle edges without jaggedness.<br>
+				For example, the final color of a pixel partially covered by the triangle is an average between triangle color and the background,
+				and is neither the triangle color nor the background color anymore.
+				This explains the results, where there seems to be more 'blurred' pixels as the sample rate increases.</p>
+
+
+			<h2>Task 3: Transforms</h2>
 			<p><b>Idea: a dancing Christmas tree</b><br>
 
 			<p><b>Modifications:</b><br>
@@ -181,6 +195,49 @@
 
 		<h2>Task 4: Barycentric coordinates</h2>
 			<img src="Task4_test7.png" alt="Task 4 Triangle Output" width="600">
+			<h2>Barycentric Coordinates</h2>
+
+			<p>
+				Barycentric coordinates are a way to represent any point inside a triangle as a weighted average of the color values of its three vertices.
+				If we have a triangle with vertices A, B, and C, and an arbitrary point P inside it, then P can be written as:
+			</p>
+
+			<p style="text-align: center; font-size: 18px;">
+				<strong>P = αA + βB + γC</strong>
+			</p>
+
+			<p>Where:</p>
+			<ul>
+				<li><strong>α + β + γ = 1</strong></li>
+				<li><strong>α, β, γ ≥ 0</strong> if P is inside the triangle</li>
+			</ul>
+
+			<p>
+				Each of the weights α, β, γ describes how "close" the point is to one of the triangle’s corners.
+				For example, if α is close to 1, the point P is close to vertex A.
+			</p>
+
+			<p>
+				In the image below (from Google), we have a triangle with three vertices A, B, and C.
+				Each vertex has weights (like 1kg bags) "attached" to it, simulating gravitational pull.
+				These weights represent the influence each vertex has over an arbitrary point P.
+			</p>
+
+			<p style="text-align: center;">
+				<img src="barycentric_coordinates_visual_aid.jpg" alt="Barycentric Coordinates Example" width="300">
+				<figcaption>barycentric coordinates interpolation visual aid</figcaption>
+			</p>
+
+			<p>
+				Below is our rendered test7.svg with sample rate to be 1:
+			</p>
+
+			<p style="text-align: center;">
+				<img src="Task4_test7_1.png" alt="Task4 result" width="300">
+				<figcaption>Task4 result with sample rate to be 1</figcaption>
+			</p>
+
+
 
 		<h2>Task 5: "Pixel sampling" for texture mapping</h2>
 		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
