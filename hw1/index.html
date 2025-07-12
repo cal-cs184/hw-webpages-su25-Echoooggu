@@ -43,13 +43,21 @@
 		-->
 
 		<h2>Overview</h2>
-		Give a high-level overview of what you implemented in this homework.
-			Think about what you've built as a whole. Share your thoughts on what interesting things you've learned from completing the homework.
+			Task1, we implemented basic rasterization, but there were plenty of obvious jaggies.<br>
+			Task2, we used supersampling to deal with the jaggies, and made the edges look smoother.<br>
+			Task3, we used 3 by 3 matrices to transform a 2D figure in homogeneous coordinates.<br>
+			Task4, we used barycentric coordinates interpolation to get the color values of all the points in the triangles.<br>
+			Task5, we implemented texture mapping using pixel sampling with both nearest-neighbor and bilinear interpolation.<br>
+			Task6, Task6, we implemented level sampling for texture mapping by computing screen-space derivatives to estimate the appropriate mipmap level,
+			and used nearest or linear interpolation across mip levels to improve rendering quality.<br>
+			Overall, we learned to use different methods for sampling and texture filtering,
+			and see how each of them affects the jaggedness of images and in turn makes the images smoother.
+			The tasks also gave us hands-on experience with transforming shapes using homogeneous coordinates, rasterization, rendering images, and texture filtering.
 
 
 
 
-		<h2>Task 1: Drawing Single-Color Triangles</h2>
+			<h2>Task 1: Drawing Single-Color Triangles</h2>
 
 			<p><b>(1) How to rasterize?</b><br>
 				- Given the coordinates of the three vertices of the triangle as input.<br>
@@ -311,7 +319,7 @@
 				<h3>How we implemented pixel sampling:</h3>
 				<p>
 					We implemented two types of pixel sampling: nearest and bilinear.
-					In the nearest method, Iwe rounded the UV coordinates to the closest integer and returned the texel color at that exact location.
+					In the nearest method, we rounded the UV coordinates to the closest integer and returned the texel color at that exact location.
 					This method is fast and simple, but it can produce blocky results when the texture is zoomed in.
 					On the other hand, the bilinear method interpolates between the four nearest texels.
 					It uses the fractional parts of the UV coordinates to weigh the contribution of each of those four colors.
@@ -387,12 +395,60 @@
 
 
 
-
-
-
-
-
 			<h2>Task 6: "Level Sampling" with mipmaps for texture mapping</h2>
+
+			<section style="margin-top: 40px;">
+
+				<p><strong>Level sampling：</strong></p>
+				<p>
+					Level sampling is a technique used in texture mapping to decide which mipmap level to sample from. It helps reduce aliasing and improves texture quality, especially when the object is far away or seen at a steep angle. In this task, we implemented three types of level sampling: L_ZERO, L_NEAREST, and L_LINEAR.<br>
+					For L_ZERO, we always sample from the base level (level 0), which is simple but can cause aliasing when the texture appears small. For L_NEAREST, we computed the mipmap level using the screen-space derivatives of the UV coordinates, then round it to the nearest integer and use that level. For L_LINEAR, we compute the level as a float, then sample from two adjacent mipmap levels and blend them based on the fractional part.<br>
+					To calculate the level, we implemented the get_level() function, which computes the difference between nearby UV coordinates and scales it using the texture resolution. This gives us an estimate of how much detail is needed. Finally, we modified sample() to use the selected sampling level and pixel sampling method (nearest or bilinear).
+				</p>
+
+				<p><strong>Tradeoffs between speed, memory usage, and antialiasing power：</strong></p>
+				<p>
+					1. Speed<br>
+					L_ZERO is the fastest because it always samples from level 0, without doing any extra calculation.<br>
+					L_NEAREST is slightly slower since it needs to compute the mipmap level once for each sample.<br>
+					L_LINEAR is the slowest because it samples from two mipmap levels and blends the results.
+				</p>
+				<p>
+					2. Memory Usage<br>
+					L_ZERO uses the least memory because it only accesses the base level of the texture.<br>
+					L_NEAREST still uses little memory, but it may access different mipmap levels depending on the screen space.<br>
+					L_LINEAR uses more memory since it fetches from two levels at once and blends between them.
+				</p>
+				<p>
+					3. Antialiasing Power<br>
+					L_ZERO has poor antialiasing and causes lots of aliasing, especially when zoomed out.<br>
+					L_NEAREST improves antialiasing by using a better matching mipmap level, but it’s still a hard switch between levels.<br>
+					L_LINEAR has the best antialiasing because it smoothly blends between levels, avoiding sharp transitions and aliasing.
+				</p>
+
+				<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px; text-align: center;">
+					<div>
+						<h5>Task6: L_ZERO, P_NEAREST</h5>
+						<img src="Task6_L_ZERO_P_NEAREST.png" style="width: 100%; max-width: 300px;">
+					</div>
+					<div>
+						<h5>Task6: L_ZERO, P_LINEAR</h5>
+						<img src="Task6_L_ZERO_P_LINEAR.png" style="width: 100%; max-width: 300px;">
+					</div>
+					<div>
+						<h5>Task6: L_NEAREST, P_NEAREST</h5>
+						<img src="Task6_L_NEAREST_P_NEAREST.png" style="width: 100%; max-width: 300px;">
+					</div>
+					<div>
+						<h5>Task6: L_NEAREST, P_LINEAR</h5>
+						<img src="Task6_L_NEAREST_P_LINEAR.png" style="width: 100%; max-width: 300px;">
+					</div>
+				</div>
+
+			</section>
+
+
+
 
 		</div>
 	</body>
