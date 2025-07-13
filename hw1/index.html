@@ -131,17 +131,17 @@
 				</li>
 			</ol>
 
-			<div style="display: flex; justify-content: center; gap: 10px; margin-top: 20px;">
+			<div style="display: flex; justify-content: center; gap: 10px; margin-top: 10px;">
 				<figure>
-					<img src="Task2_test4_1.png" width="220px">
+					<img src="Task2_test4_1.png" width="150px">
 					<figcaption>Task2_test4 with sample rate to be 1</figcaption>
 				</figure>
 				<figure>
-					<img src="Task2_test4_4.png" width="220px">
+					<img src="Task2_test4_4.png" width="150px">
 					<figcaption>Task2_test4 with sample rate to be 4</figcaption>
 				</figure>
 				<figure>
-					<img src="Task2_test4_16.png" width="220px">
+					<img src="Task2_test4_16.png" width="150px">
 					<figcaption>Task2_test4 with sample rate to be 16</figcaption>
 				</figure>
 			</div>
@@ -449,6 +449,38 @@
 						<img src="Task6_L_NEAREST_P_LINEAR.png" style="width: 100%; max-width: 300px;">
 					</div>
 				</div>
+
+				<div>
+					<p><strong>Ps. Issue Report: Mipmap Level Sampling Not Working on Custom PNGs</strong></p>
+
+					<p>Problem Description<br>
+						There have been many issues bothering us along the way, but this one particularly occupied a lot of our time,
+						so we wrote a report about this problem.<br>
+						When using our own .png texture file and switching between L_ZERO, L_NEAREST,
+						and L_LINEAR level sampling modes (by pressing the L key), the image remains unchanged.
+						In contrast, switching modes using the instructor-provided textures produces noticeable differences.</p>
+
+					<p>Cause:<br>
+						After debugging, we discovered that our custom PNG textures did not generate mipmap levels properly.
+						This is because the mipmap hierarchy (Texture::mipmap) is only created if the texture
+						is properly loaded and generate_mips() is called on it.
+						Some custom PNGs may not be preprocessed correctly or might not have had generate_mips() triggered,
+						leading to only the base level (level 0) being available.
+						Therefore, any L_NEAREST or L_LINEAR mode would fallback to level 0 and appear identical to L_ZERO.</p>
+
+					<p>Solution:<br>
+						We ensured that the loaded image has sufficient resolution and visual structure (e.g., patterns, lines)
+						so that mipmapping produces distinguishable results.<br>
+						After making adjustments, the level sampling behavior started working properly with our custom PNG textures.</p>
+
+					<p>Conclusion:<br>
+						The problem is related to mipmap level calculation.
+						The issue taught us that mipmapping depends not only on code logic,
+						but also on proper texture setup and preprocessing.
+						In the future, we’ll double-check that custom textures have mipmaps generated and contain enough detail across scales.
+						It’s also a good reminder to always compare outputs using the same consistent and controlled environment.</p>
+				</div>
+
 
 			</section>
 
