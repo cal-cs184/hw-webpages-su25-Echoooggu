@@ -32,11 +32,11 @@
 
 		<br>
 
-		Link to webpage: (TODO) <a href="https://github.com/cal-cs184/hw-webpages-su25-Echoooggu/blob/main/hw1/index.html">Link to webpage</a>
+		Link to webpage: <a href="https://github.com/cal-cs184/hw-webpages-su25-Echoooggu/blob/main/hw1/index.html">Link to webpage</a>
 		
 		<br>
 
-		Link to GitHub repository: (TODO) <a href="https://github.com/cal-cs184/hw-rasterizer-fishros">Link to Github repository</a>
+		Link to GitHub repository: <a href="https://github.com/cal-cs184/hw-rasterizer-fishros">Link to Github repository</a>
 
 		<!--
 		We've already added one heading per task, to make your write-up as navigable when grading. Please fit your write-up within these sections!
@@ -73,7 +73,7 @@
 			<p><b>(2) Explain how your algorithm is no worse than one that checks each sample within the bounding box of the triangle.</b><br>
 				- We check every pixel center within the bounding box once, by using the point-in-triangle test (i.e. the <code>inside()</code> functions).
 				Then fill the pixel with color only if the pixel is within or on the edge of the triangle.<br>
-				- No pixel center outside the bounding box is checked so that I save time and computation.
+				- No pixel center outside the bounding box is checked so that we save time and computation.
 			</p>
 
 			<div style="display: flex; justify-content: center; gap: 20px; margin-top: 20px;">
@@ -83,7 +83,7 @@
 				</figure>
 				<figure>
 					<img src="Task1_with_inspector.png" style="width: 300px;">
-					<figcaption>Task1 test4 with inspector.png</figcaption>
+					<figcaption>Task1 test4 with inspector</figcaption>
 				</figure>
 			</div>
 
@@ -94,14 +94,19 @@
 			<p><b>Supersampling algorithm:</b></p>
 			<ol>
 				<li>Divide each pixel into a grid of subpixels</li>
-				<li>Rasterization: loop through the subpixels and compute their center’s location; then check whether they lie inside the triangle using the 'inside' function; then store the color values of the pixels that are inside the triangle in the 'sample_buffer'</li>
-				<li>Resolve to framebuffer: after all the primitives are rasterized into the sample buffer, use <code>resolve_to_framebuffer()</code> to compute the final pixel color. For each pixel, average its subpixel values and write the result into the final framebuffer ('rgb_framebuffer_target').</li>
+				<li>Rasterization: loop through the subpixels and compute their center’s location;
+					then check whether they lie inside the triangle using the <code>inside</code> function;
+					then store the color values of the pixels that are inside the triangle in the <code>sample_buffer</code></li>
+				<li>Resolve to framebuffer: after all the primitives are rasterized into the sample buffer,
+					use <code>resolve_to_framebuffer()</code> to compute the final pixel color.
+					For each pixel, average its subpixel values and write the result into the final framebuffer.</li>
 			</ol>
 
 			<p><b>Data Structures used:</b></p>
 			<ol>
-				<li>std::vector&lt;Color&gt;: <br><code>sample_buffer()</code> stores supersampled color values for all pixels<br>size: width * height * sample_rate</li>
+				<li>std::vector&lt;Color&gt;, sample_buffer: <br><code>sample_buffer</code> stores supersampled color values of all pixels</li>
 				<li>unsigned char: <br><code>rgb_framebuffer_target()</code> is the final framebuffer to be displayed on screen</li>
+				<li>Color</li>
 			</ol>
 
 			<p><b>Modifications:</b></p>
@@ -118,7 +123,7 @@
 				<li><p><b><code>resolve_to_framebuffer()</code>:</b><br></p>
 					After we resized the sample_buffer to contain color values of all pixels,
 					we averaged the color values of each sample_rate times sample_rate grid.
-					The, the results are written into reb_gramebuffer_target, which is ultimately displayed.
+					Then, the results are written into <code>reb_gramebuffer_target</code>, which is ultimately displayed.
 				</li>
 				<li><p><b><code>fill_pixel()</code>:</b><br></p>
 					Since lines and points are not supersampled,
@@ -261,7 +266,7 @@
 			<p>Where:</p>
 			<ul>
 				<li><strong>α + β + γ = 1</strong></li>
-				<li><strong>α, β, γ ≥ 0</strong> if P is inside the triangle</li>
+				<li><strong>α, β, γ ≥ 0</strong> if P is inside the triangle or on the edge of the triangle</li>
 			</ul>
 
 			<p>
@@ -272,12 +277,12 @@
 			<p>
 				In the image below (from Google), we have a triangle with three vertices A, B, and C.
 				Each vertex has weights (like 1kg bags) "attached" to it, simulating gravitational pull.
-				These weights represent the influence each vertex has over an arbitrary point P.
+				These weights represent the influence each vertex has over an arbitrary point P, which is the red point below.
 			</p>
 
 			<figure style="text-align: center;">
 				<img src="barycentric_coordinates_visual_aid.jpg" alt="Barycentric Coordinates Example" width="300">
-				<figcaption>barycentric coordinates interpolation visual aid</figcaption>
+				<figcaption>barycentric coordinates visual aid</figcaption>
 			</figure>
 
 				<p>
