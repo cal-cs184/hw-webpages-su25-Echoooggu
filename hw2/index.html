@@ -234,14 +234,14 @@
 			</p>
 			<figure>
 				<img src="part4_flip_illustration.jpg" style="width: 400px;">
-				<figcaption>Part3 Phong shading</figcaption>
+				<figcaption>Part4 edge flip operation</figcaption>
 			</figure>
 			<p>
 				(2) (from the course instructions) Based on the above illustration, for every element in the modified mesh,
 				set all of its pointers to the correct element in the modified mesh, even if the element being pointed to has not changed:<br>
 				For each vertex, edge, and face, set its halfedge pointer.<br>
 				For each half-edge, set its next, twin, vertex, edge, and face pointer to the correct element.
-				Use Halfedge::setNeighbors( HalfedgeIter next, HalfedgeIter twin, VertexIter vertex, EdgeIter edge, FaceIter face )
+				Use <code>Halfedge::setNeighbors( HalfedgeIter next, HalfedgeIter twin, VertexIter vertex, EdgeIter edge, FaceIter face )</code>
 				to set all pointers of a half-edge at once.
 			</p>
 
