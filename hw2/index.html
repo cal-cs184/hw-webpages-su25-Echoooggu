@@ -320,15 +320,15 @@
 			<div style="display: flex; justify-content: center; gap: 20px; margin-top: 20px;">
 				<figure>
 					<img src="part4_debug1(1).jpg" style="width:300px">
-					<figcaption>Part4 second version: holes</figcaption>
+					<figcaption>non-shared edges disappearing</figcaption>
 				</figure>
 				<figure>
 					<img src="part4_debug1(2).jpg" style="width: 300px;">
-					<figcaption>non-shared edges disappearing</figcaption>
+					<figcaption>holes</figcaption>
 				</figure>
 			</div>
 			<p>
-				However, there were still issues.
+				There were still issues.
 				After selecting and flipping an edge,
 				we observed that the non-shared edges of the two adjacent triangles disappeared (as shown in the left figure).
 				Subsequently, when flipping the diagonals of neighboring quadrilaterals,
@@ -349,7 +349,7 @@
 				<figcaption>Part4 third version: non-shared edges still disappearing...</figcaption>
 			</figure>
 
-			<p>
+			<p>(4) debug3:<br>
 				We recognized that external half-edges (h6-h9) might also require proper neighbor assignments via setNeighbors().
 				After implementing these updates, we finally worked it out!!!
 				The non-shared edges remain intact during flips without disappearance,
@@ -361,7 +361,10 @@
 
 
 		<h3>Part 5: Edge split</h3>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			<figure>
+				<img src="part5_initial.jpg.jpg" style="width: 400px;">
+				<figcaption>Part5 first version: could split, but with holes</figcaption>
+			</figure>
 
 		<h3>Part 6: Loop subdivision for mesh upsampling</h3>
 		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
