@@ -210,7 +210,7 @@
 			<p>
 				(3) Steps:<br>
 				First (along the u direction),
-				for each set of control points (e.g., each row),
+				for each set of control points,
 				perform the 1D de Casteljau algorithm at parameter u,
 				producing an intermediate point on that curve.<br>
 				Second (along the v direction),
@@ -265,9 +265,11 @@
 			</figure>
 			<p>
 				(2) (from the course instructions) Based on the above illustration, for every element in the modified mesh,
-				set all of its pointers to the correct element in the modified mesh, even if the element being pointed to has not changed:<br>
+				set all of its pointers to the correct element in the modified mesh,
+				even if the element being pointed to has not changed:<br>
 				For each vertex, edge, and face, set its halfedge pointer.<br>
-				For each half-edge, set its next, twin, vertex, edge, and face pointer to the correct element.
+				For each half-edge, set its next, twin, vertex, edge,
+				and face pointer to the correct element.
 				Use <code>Halfedge::setNeighbors( HalfedgeIter next, HalfedgeIter twin, VertexIter vertex, EdgeIter edge, FaceIter face )</code>
 				to set all pointers of a half-edge at once.
 			</p>
@@ -300,7 +302,61 @@
 
 		<h4>3. EVENTFUL debugging journey:</h4>
 			<p>
-				(1)
+				(1) first version:
+			</p>
+			<figure>
+				<img src="part4_initial.jpg" style="width: 400px;">
+				<figcaption>Part4 first version: really wierd</figcaption>
+			</figure>
+
+			<p>
+				(2) debug1:<br>
+				We discovered a misunderstanding regarding the half-edge order after edge flipping.
+				We initially assumed the outer half-edges (h6, h7, h8, h9) should also rotate clockwise with the operation,
+				abut later realized they actually maintain their original topological relationships with the vertices.
+				Thus, we changed the external half-edges in the codes to the correct names.
+				Here's a second version:
+			</p>
+			<div style="display: flex; justify-content: center; gap: 20px; margin-top: 20px;">
+				<figure>
+					<img src="part4_debug1(1).jpg" style="width:300px">
+					<figcaption>Part4 second version: holes</figcaption>
+				</figure>
+				<figure>
+					<img src="part4_debug1(2).jpg" style="width: 300px;">
+					<figcaption>non-shared edges disappearing</figcaption>
+				</figure>
+			</div>
+			<p>
+				However, there were still issues.
+				After selecting and flipping an edge,
+				we observed that the non-shared edges of the two adjacent triangles disappeared (as shown in the left figure).
+				Subsequently, when flipping the diagonals of neighboring quadrilaterals,
+				holes appeared in the mesh (as shown in the right figure).
+			</p>
+
+			<p>
+				(3) debug2:<br>
+				We identified that our initial implementation incorrectly assigned vertex, edge, and face pointers to half-edges,
+				rather than setting half-edge pointers to other mesh attributes.
+				After reversing this relationship (making half-edges point to vertices, edges, and faces instead),
+				edge flips now execute without creating holes.
+				However, non-shared edges still disappear during operations as shown below.
+				Here's the third version:
+			</p>
+			<figure>
+				<img src="part4_debug2.jpg" style="width: 400px;">
+				<figcaption>Part4 third version: non-shared edges still disappearing...</figcaption>
+			</figure>
+
+			<p>
+				We recognized that external half-edges (h6-h9) might also require proper neighbor assignments via setNeighbors().
+				After implementing these updates, we finally worked it out!!!
+				The non-shared edges remain intact during flips without disappearance,
+				as demonstrated in the 'Result' part.
+				Though it seems that there are only four versions along our journey of debugging this part,
+				it really took us plenty of time.
+				Luckily, we finally made it!
 			</p>
 
 
