@@ -32,16 +32,12 @@
 
 		<br>
 
-		Link to webpage: <a href="https://cs184.eecs.berkeley.edu/sp25">cs184.eecs.berkeley.edu/sp25</a>
+		Link to webpage: <a href="https://github.com/cal-cs184/hw-webpages-su25-Echoooggu/blob/main/hw2/index.html">github.com/cal-cs184/hw-webpages-su25-Echoooggu/blob/main/hw2/index.html</a>
 
 		<br>
 		
 		Link to GitHub repository: <a href="https://github.com/cal-cs184/hw2-meshedit-fishros-again">github.com/cal-cs184/hw2-meshedit-fishros-again</a>
 
-		<figure>
-			<img src="teapot.png" alt="Teapot" style="width:50%"/>
-			<figcaption>You can add images with captions!</figcaption>
-		</figure>
 
 		<!--
 		We've already added one heading per part, to make your write-up as navigable when grading. Please fit your write-up within these sections!
@@ -53,33 +49,170 @@
 		<h2>Section I: Bezier Curves and Surfaces</h2>
 
 		<h3>Part 1: Bezier curves with 1D de Casteljau subdivision</h3>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
-		<p>Here is an example 2x2 gridlike structure using an HTML table. Each <b>tr</b> is a row and each <b>td</b> is a column in that row. You might find this useful for framing and showing your result images in an organized fashion.</p>
-		<div style="display: flex; flex-direction: column; align-items: center;">
-			<table style="width: 100%; text-align: center; border-collapse: collapse;">
-			  <tr>
-				<td style="text-align: center;">
-				  <img src="teapot.png" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
-				<td style="text-align: center;">
-				  <img src="teapot.png" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
-			  </tr>
-			  <tr>
-				<td style="text-align: center;">
-				  <img src="teapot.png" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
-				<td style="text-align: center;">
-				  <img src="teapot.png" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
-			  </tr>
-			</table>
-		</div>
+			<h4>1. The Explanation of De Casteljau's Algorithm</h4>
+			<p>
+				It is a recursive method for evaluating Bézier curves.
+				It works by linearly interpolating between control points at a given parameter <em>t</em>.
+				In each step, it generates a new set of points by interpolating between the current points,
+				and this process continues until only one point remains.
+				By changing the value of <em>t</em>,
+				we can generate a list of final points.
+				The core idea is that,
+				whatever the value of <em>t</em> is,
+				all these final points lie on the curve,
+				so we can use this principle to generate a Bezier curve.
+			</p>
+
+			<h4>2. Implementation of Bezier Curve Evaluation</h4>
+			<p>
+				We implemented de Casteljau's algorithm by recursively performing linear interpolation between control points.
+				Given a set of control points and a parameter <em>t</em>,
+				the algorithm linearly interpolates between consecutive points to generate a new set of points.
+				This process is repeated until only one point remains,
+				which lies on the Bézier curve corresponding to the parameter <em>t</em>.
+				By varying <em>t</em> from 0 to 1,
+				we can compute all points along the curve,
+				effectively evaluating the Bézier curve.
+			</p>
+
+			<h5>Detail:</h5>
+			<p>
+				The function <code>evaluateStep</code> takes a vector of control points as input
+				and computes one step of de Casteljau's algorithm.
+				For each pair of adjacent points,
+				it calculates a new point by linear interpolation using the parameter <em>t</em>:
+			</p>
+
+			<figure>
+				<img src="lerp_screenshot.jpg" alt="De Casteljau's algorithm">
+				<figcaption>De Casteljau's algorithm formula</figcaption>
+			</figure>
+
+			<p>
+				These newly computed points form the next level of intermediate control points.
+				The function returns this new vector of points.
+				By recursively calling this function until only one point remains,
+				the algorithm obtains the precise point on the Bézier curve for the parameter <em>t</em>.
+			</p>
+
+			<h4>3. Final Result</h4>
+			<h5>(1) Bézier Curve with 6 Control Points</h5>
+			<figure>
+				<img src="Bezier_curve_with_six_points.jpg" alt="Bézier curve with 6 control points">
+				<figcaption>Bézier curve generated using 6 control points</figcaption>
+			</figure>
+
+			<h5>(2) Step-by-Step Visualization of Bézier Curve Evaluation</h5>
+			<div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
+				<figure style="width: 48%;">
+					<img src="Bezier_curve_step1.jpg" alt="Step 1 of evaluation">
+					<figcaption>Bezier curve step1</figcaption>
+				</figure>
+				<figure style="width: 48%;">
+					<img src="Bezier_curve_step2.jpg" alt="Step 2 of evaluation">
+					<figcaption>Bezier curve step2</figcaption>
+				</figure>
+				<figure style="width: 48%;">
+					<img src="Bezier_curve_step3.jpg" alt="Step 3 of evaluation">
+					<figcaption>Bezier curve step3</figcaption>
+				</figure>
+				<figure style="width: 48%;">
+					<img src="Bezier_curve_step4.jpg" alt="Step 4 of evaluation">
+					<figcaption>Bezier curve step4</figcaption>
+				</figure>
+				<figure style="width: 48%;">
+					<img src="Bezier_curve_step5.jpg" alt="Step 4 of evaluation">
+					<figcaption>Bezier curve step5</figcaption>
+				</figure>
+				<figure style="width: 48%;">
+					<img src="Bezier_curve_step6.jpg" alt="Step 4 of evaluation">
+					<figcaption>Bezier curve step6</figcaption>
+				</figure>
+			</div>
+			<figure style="text-align: center; margin: 20px auto;">
+				<img src="Bezier_curve_step7.jpg" alt="evaluation result">
+				<figcaption>result: the green curve is the Bezier curve</figcaption>
+			</figure>
+
+			<h3>(3) Modifying Parameter t via Mouse Scrolling (t From 0 to 1)</h3>
+			<div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
+				<figure style="width: 48%;">
+					<img src="Bezier_curve_t0.jpg" alt="t=0">
+					<figcaption>Curve evaluation at t = 0</figcaption>
+				</figure>
+				<figure style="width: 48%;">
+					<img src="Bezier_curve_t0.25.jpg" alt="t=0.25">
+					<figcaption>Curve evaluation at t around 0.25</figcaption>
+				</figure>
+			</div>
+			<div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
+				<figure style="width: 32%;">
+					<img src="Bezier_curve_t0.5.jpg" alt="t=0.5">
+					<figcaption>Curve evaluation at t around 0.5</figcaption>
+				</figure>
+				<figure style="width: 32%;">
+					<img src="Bezier_curve_t0.75.jpg" alt="t=0.75">
+					<figcaption>Curve evaluation at t around 0.75</figcaption>
+				</figure>
+				<figure style="width: 32%;">
+					<img src="Bezier_curve_t1.jpg" alt="t=1">
+					<figcaption>Curve evaluation at t = 1</figcaption>
+				</figure>
+			</div>
+
+			<h5>(4) Slightly Different Bézier Curves by Adjusting Control Points</h5>
+			<div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
+				<figure style="width: 32%;">
+					<img src="Bezier_curve_moving1.jpg" alt="Curve variation 1">
+					<figcaption>Curve with control points unmoved</figcaption>
+				</figure>
+				<figure style="width: 32%;">
+					<img src="Bezier_curve_moving2.jpg" alt="Curve variation 2">
+					<figcaption>Curve with the last control point moved upward</figcaption>
+				</figure>
+				<figure style="width: 32%;">
+					<img src="Bezier_curve_moving3.jpg" alt="Curve variation 3">
+					<figcaption>Curve with the last control point moved more upward</figcaption>
+				</figure>
+			</div>
+
+			<style>
+				figure {
+					margin: 20px 0;
+					text-align: center;
+				}
+				figcaption {
+					margin-top: 8px;
+				}
+				section {
+					margin-bottom: 40px;
+				}
+			</style>
+<!--			<div style="display: flex; flex-direction: column; align-items: center;">-->
+<!--			<table style="width: 100%; text-align: center; border-collapse: collapse;">-->
+<!--			  <tr>-->
+<!--				<td style="text-align: center;">-->
+<!--				  <img src="teapot.png" width="400px"/>-->
+<!--				  <figcaption>Caption goes here.</figcaption>-->
+<!--				</td>-->
+<!--				<td style="text-align: center;">-->
+<!--				  <img src="teapot.png" width="400px"/>-->
+<!--				  <figcaption>Caption goes here.</figcaption>-->
+<!--				</td>-->
+<!--			  </tr>-->
+<!--			  <tr>-->
+<!--				<td style="text-align: center;">-->
+<!--				  <img src="teapot.png" width="400px"/>-->
+<!--				  <figcaption>Caption goes here.</figcaption>-->
+<!--				</td>-->
+<!--				<td style="text-align: center;">-->
+<!--				  <img src="teapot.png" width="400px"/>-->
+<!--				  <figcaption>Caption goes here.</figcaption>-->
+<!--				</td>-->
+<!--			  </tr>-->
+<!--			</table>-->
+<!--		</div>-->
 
 		<h3>Part 2: Bezier surfaces with separable 1D de Casteljau</h3>
 		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
