@@ -1,3 +1,4 @@
+<!-- after experiments, 400px for single image, 300px for two aligning imges, 200px for three -->
 <html>
 	<head>
 		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=default'></script>
@@ -108,32 +109,32 @@
 				<table style="width: 100%; text-align: center; border-collapse: collapse;">
 					<tr>
 						<td style="text-align: center;">
-							<img src="Bezier_curve_step1.jpg" width="400px"/>
-							<figcaption>Caption goes here.</figcaption>
+							<img src="Bezier_curve_step1.jpg" width="300px"/>
+							<figcaption>Bezier curve step1</figcaption>
 						</td>
 						<td style="text-align: center;">
-							<img src="Bezier_curve_step2.jpg" width="400px"/>
-							<figcaption>Caption goes here.</figcaption>
-						</td>
-					</tr>
-					<tr>
-						<td style="text-align: center;">
-							<img src="Bezier_curve_step3.jpg" width="400px"/>
-							<figcaption>Caption goes here.</figcaption>
-						</td>
-						<td style="text-align: center;">
-							<img src="Bezier_curve_step4.jpg" width="400px"/>
-							<figcaption>Caption goes here.</figcaption>
+							<img src="Bezier_curve_step2.jpg" width="300px"/>
+							<figcaption>Bezier curve step2</figcaption>
 						</td>
 					</tr>
 					<tr>
 						<td style="text-align: center;">
-							<img src="Bezier_curve_step5.jpg" width="400px"/>
-							<figcaption>Caption goes here.</figcaption>
+							<img src="Bezier_curve_step3.jpg" width="300px"/>
+							<figcaption>Bezier curve step3</figcaption>
 						</td>
 						<td style="text-align: center;">
-							<img src="Bezier_curve_step6.jpg" width="400px"/>
-							<figcaption>Caption goes here.</figcaption>
+							<img src="Bezier_curve_step4.jpg" width="300px"/>
+							<figcaption>Bezier curve step4</figcaption>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="Bezier_curve_step5.jpg" width="300px"/>
+							<figcaption>Bezier curve step5</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="Bezier_curve_step6.jpg" width="300px"/>
+							<figcaption>Bezier curve step6</figcaption>
 						</td>
 					</tr>
 				</table>
@@ -148,27 +149,27 @@
 				<table style="width: 100%; text-align: center; border-collapse: collapse;">
 					<tr>
 						<td style="text-align: center;">
-							<img src="Bezier_curve_t0.jpg" width="400px"/>
+							<img src="Bezier_curve_t0.jpg" width="300px"/>
 							<figcaption>Bezier curve at t = 0</figcaption>
 						</td>
 						<td style="text-align: center;">
-							<img src="Bezier_curve_t0.25.jpg" width="400px"/>
+							<img src="Bezier_curve_t0.25.jpg" width="300px"/>
 							<figcaption>Bezier curve at t around 0.25</figcaption>
 						</td>
 					</tr>
 					<tr>
 						<td style="text-align: center;">
-							<img src="Bezier_curve_t0.5.jpg" width="400px"/>
+							<img src="Bezier_curve_t0.5.jpg" width="300px"/>
 							<figcaption>Bezier curve at t around 0.5</figcaption>
 						</td>
 						<td style="text-align: center;">
-							<img src="Bezier_curve_t0.75.jpg" width="400px"/>
+							<img src="Bezier_curve_t0.75.jpg" width="300px"/>
 							<figcaption>Bezier curve at t around 0.75</figcaption>
 						</td>
 					</tr>
 					<tr>
 						<td style="text-align: center;">
-							<img src="Bezier_curve_t1.jpg" width="400px"/>
+							<img src="Bezier_curve_t1.jpg" width="300px"/>
 							<figcaption>Bezier curve at t = 1</figcaption>
 						</td>
 					</tr>
@@ -197,10 +198,11 @@
 
 		<h3>Part 2: Bezier surfaces with separable 1D de Casteljau</h3>
 
+
 		<h2>Section II: Triangle Meshes and Half-Edge Data Structure</h2>
 
 		<h3>Part 3: Area-weighted vertex normals</h3>
-			<h4>Implementation the area-weighted vertex normals:</h4>
+			<h4>1. Implementation the area-weighted vertex normals:</h4>
 			<p>
 				To compute smooth vertex normals,
 				we implemented area-weighted normal estimation in <code>Vertex::normal()</code>.
@@ -212,7 +214,7 @@
 				This method produces smoother shading effects during rendering.
 			</p>
 
-			<h4>Result:</h4>
+			<h4>2. Result:</h4>
 			<div style="display: flex; justify-content: center; gap: 20px; margin-top: 20px;">
 				<figure>
 					<img src="part3_flat.jpg" alt="part3 flat shading" style="width:300px">
@@ -226,10 +228,50 @@
 
 
 		<h3>Part 4: Edge flip</h3>
-		<h4>1. Implementation of edge flips:</h4>
+		<h4>1. Implementation of edge flip operation:</h4>
+			<p>
+				(1) Draw out the images of half-edge data structure both before flip and after flip. See below.
+			</p>
+			<figure>
+				<img src="part4_flip_illustration.jpg" style="width: 400px;">
+				<figcaption>Part3 Phong shading</figcaption>
+			</figure>
+			<p>
+				(2) (from the course instructions) Based on the above illustration, for every element in the modified mesh,
+				set all of its pointers to the correct element in the modified mesh, even if the element being pointed to has not changed:<br>
+				For each vertex, edge, and face, set its halfedge pointer.<br>
+				For each half-edge, set its next, twin, vertex, edge, and face pointer to the correct element.
+				Use Halfedge::setNeighbors( HalfedgeIter next, HalfedgeIter twin, VertexIter vertex, EdgeIter edge, FaceIter face )
+				to set all pointers of a half-edge at once.
+			</p>
 
+		<h4>2. Result:</h4>
+			<div style="display: flex; flex-direction: column; align-items: center;">
+				<table style="width: 100%; text-align: center; border-collapse: collapse;">
+					<tr>
+						<td style="text-align: center;">
+							<img src="part4_full_view.jpg" width="300px"/>
+							<figcaption>Part4 full view</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="part4_front_view.jpg" width="300px"/>
+							<figcaption>Part4 front view</figcaption>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="part4_top_view.jpg" width="300px"/>
+							<figcaption>Part4 top view</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="part4_bottom_view.jpg" width="300px"/>
+							<figcaption>Part4 bottom view</figcaption>
+						</td>
+					</tr>
+				</table>
+			</div>
 
-		<h4>2. Implementation of edge flips:</h4>
+		<h4>3. EVENTFUL debugging journey:</h4>
 
 
 		<h3>Part 5: Edge split</h3>
