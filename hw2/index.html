@@ -197,6 +197,33 @@
 			</div>
 
 		<h3>Part 2: Bezier surfaces with separable 1D de Casteljau</h3>
+			<h4>1. Implementation of Bezier Surface Evaluation Using de Casteljau Algorithm:</h4>
+			<p>
+				(1) Initial condition:
+				We have a grid of control points located in 3D space,
+				and two parameters u and v.
+			</p>
+			<p>
+				(2) Goal: given fixed parameters u and v,
+				compute the corresponding point on the Bezier surface.
+			</p>
+			<p>
+				(3) Steps:<br>
+				First (along the u direction),
+				for each set of control points (e.g., each row),
+				perform the 1D de Casteljau algorithm at parameter u,
+				producing an intermediate point on that curve.<br>
+				Second (along the v direction),
+				collect all intermediate points obtained from the first step into a new set,
+				and then perform the 1D de Casteljau algorithm on this set at parameter v,
+				yielding the final point on the Bezier surface corresponding to parameters u and v.
+			</p>
+
+			<h4>2. Result:</h4>
+			<figure>
+				<img src="part2.jpg" style="width: 400px;">
+				<figcaption>Part2 result</figcaption>
+			</figure>
 
 
 		<h2>Section II: Triangle Meshes and Half-Edge Data Structure</h2>
@@ -272,6 +299,9 @@
 			</div>
 
 		<h4>3. EVENTFUL debugging journey:</h4>
+			<p>
+				(1)
+			</p>
 
 
 		<h3>Part 5: Edge split</h3>
