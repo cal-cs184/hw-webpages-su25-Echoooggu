@@ -371,6 +371,20 @@
 
 
 		<h3>Part 5: Edge split</h3>
+			<h4>1. Implementation of edge split operation:</h4>
+			<p>
+				To perform an edge split on the shared edge of two triangles,
+				we first create a new vertex m at the midpoint of the edge.
+				We then create three new edges, six new half-edges, and two new faces to replace the original two faces.
+				The halfedges are re-assigned to ensure every triangle has a consistent counterclockwise orientation.
+				Specifically, the new faces are (a, b, m) and (a, m, c) on one side, and (d, c, m) and (d, m, b) on the other.
+				Each half-edge is updated with next, twin, vertex, edge, and face pointers,
+				and the new vertex m's halfedge points to one of its outgoing half-edges.
+			</p>
+			<figure>
+				<img src="part5_illustration.jpg" style="width: 400px;">
+			</figure>
+			<h4>2. Result:</h4>
 			<figure>
 				<img src="part5_initial.jpg" style="width: 400px;">
 				<figcaption>Part5 first version: could split, but with holes</figcaption>
