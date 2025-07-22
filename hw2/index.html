@@ -386,16 +386,135 @@
 			</figure>
 			<h4>2. Result:</h4>
 			<figure>
-				<img src="part5_initial.jpg" style="width: 400px;">
-				<figcaption>Part5 first version: could split, but with holes</figcaption>
+				<img src="part5_split.jpg" style="width: 400px;">
+				<figcaption>Part5: only splits</figcaption>
+			</figure>
+			<figure>
+				<img src="part5_split_flip.jpg" style="width: 400px;">
+				<figcaption>Part5: splits and flips</figcaption>
 			</figure>
 
 		<h3>Part 6: Loop subdivision for mesh upsampling</h3>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			<h4>1. Implementation on loop subdivision</h4>
+			<p>(1) Get new positions of each original vertices and store them in Vector::newPosition</p>
+			<ul>
+				<li>Mark original vertices</li>
+				<li>Sum up positions of all neighboring vertices</li>
+				<li>Use the loop subdivision rule (see image below) to update new positions of the original vertices as a weighted average</li>
+				<li>Store the new positions in Vertex::newPosition</li>
+			</ul>
 
-		<h2>(Optional) Section III: Potential Extra Credit - Art Competition: Model something Creative</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-			
+			<figure>
+				<img src="part6_illustration1.jpg" style="width: 400px;">
+			</figure>
+
+			<p>(2) Get positions of new vertices and store them in Edge::newPosition</p>
+			<ul>
+				<li>Mark the original edge</li>
+				<li>Get positions of the four vertices of the quadrilateral, of which the original edge is the diagonal</li>
+				<li>Use the loop subdivision rule (see image below) to get the new position of the new vertix as a weighted average</li>
+				<li>Store the new positions in Edge::newPosition</li>
+			</ul>
+
+			<figure>
+				<img src="part6_illustration2.jpg" style="width: 400px;">
+			</figure>
+
+			<p>(3) Split edge</p>
+			<ul>
+				<li>Iterate through the original edges</li>
+				<li>Use splitEdge() to split each original edge</li>
+				<li>Set the position of the returned mid-point</li>
+			</ul>
+
+			<p>(4) Flip new edges if necessary</p>
+			<ul>
+				<li>For each new edge, check if it connect an old vertex and a new vertex</li>
+				<li>Flip such edges</li>
+			</ul>
+
+			<p>(5) Update final positions</p>
+
+			<h4>2. How meshes behave after loop subdivision? What happens to sharp corners and edges?</h4>
+			<ul>
+				<li>The number of polygons increases. For each triangle mesh, there will be three more faces, three more vertices, and three more edges.</li>
+				<li>The overall shape becomes rounder.</li>
+				<li>Sharp corners: Originally, some vertices have sharp angles. After subdivision, these corners are rounded.</li>
+				<li>Sharp edges become curved.</li>
+			</ul>
+
+			<div style="display: flex; justify-content: center; gap: 20px; margin-top: 20px;">
+				<figure>
+					<img src="part6(1).jpg" style="width:300px">
+				</figure>
+				<figure>
+					<img src="part6(2).jpg" style="width: 300px;">
+				</figure>
+			</div>
+
+
+			<h4>4. Perform several iterations of loop subdivision on the cube.</h4>
+			<p>
+				Notice that the cube becomes slightly asymmetric after repeated subdivisions.
+				Can you pre-process the cube with edge flips and splits so that the cube subdivides symmetrically?
+				Document these effects and explain why they occur. Also explain how your pre-processing helps alleviate the effects.
+			</p>
+			<div style="display: flex; flex-direction: column; align-items: center;">
+				<table style="width: 100%; text-align: center; border-collapse: collapse;">
+					<tr>
+						<td style="text-align: center;">
+							<img src="part6_cube1.jpg" width="300px"/>
+							<figcaption>Bezier curve step1</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="part6_cube2.jpg" width="300px"/>
+							<figcaption>Bezier curve step2</figcaption>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="part6_cube3.jpg" width="300px"/>
+							<figcaption>Bezier curve step3</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="part6_cube4.jpg" width="300px"/>
+							<figcaption>Bezier curve step4</figcaption>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="part6_cube5.jpg" width="300px"/>
+							<figcaption>Bezier curve step5</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="part6_cube6.jpg" width="300px"/>
+							<figcaption>Bezier curve step6</figcaption>
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<p>
+				When repeatedly applying Loop subdivision to dae/cube.dae,
+				the cube gradually becomes asymmetric.
+				This asymmetry arises because the initial triangulation of the cube's quadrilateral faces introduces arbitrary diagonals,
+				leading to inconsistent mesh connectivity.
+				Since Loop subdivision relies heavily on local topology,
+				these inconsistencies result in uneven smoothing and visual artifacts.
+				To address this, we pre-processed the mesh by flipping edges to ensure symmetrical diagonal patterns across opposing faces and,
+				where necessary, splitting edges to balance vertex valence.
+			</p>
+
+			<figure>
+				<img src="part6_symmetry.jpg" style="width: 400px;">
+			</figure>
+
+
+
+
+
+
+
 		</div>
 	</body>
 </html>
